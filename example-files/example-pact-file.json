@@ -1,0 +1,87 @@
+{
+  "consumer": {
+    "name": "connect-api"
+  },
+  "provider": {
+    "name": "sims-paid-search"
+  },
+  "interactions": [
+    {
+      "description": "a request for the site's global config",
+      "providerState": "Has a global config",
+      "request": {
+        "method": "GET",
+        "path": "/adwords/-500/config/global",
+        "headers": {
+          "Accept": "*/*",
+          "Api-Token": "PAID_SEARCH_API_KEY"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "code": 200,
+          "message": "",
+          "data": {
+            "configuration": {
+              "configuration_id": 1,
+              "search_url": "http://www.site.com/search?q=<SEARCH_TERM>",
+              "space_replace": "%20",
+              "site_url": "http://site.com",
+              "site_name": "Site Name"
+            }
+          }
+        },
+        "matchingRules": {
+          "$.body.data.configuration.configuration_id": {
+            "match": "type"
+          },
+          "$.body.data.configuration.search_url": {
+            "match": "type"
+          },
+          "$.body.data.configuration.space_replace": {
+            "match": "regex",
+            "regex": "^(\\+|%20)$"
+          },
+          "$.body.data.configuration.site_url": {
+            "match": "type"
+          },
+          "$.body.data.configuration.site_name": {
+            "match": "type"
+          }
+        }
+      }
+    },
+    {
+      "description": "a request for the site's global config",
+      "providerState": "does not have a global config",
+      "request": {
+        "method": "GET",
+        "path": "/adwords/-200/config/global",
+        "headers": {
+          "Accept": "*/*",
+          "Api-Token": "PAID_SEARCH_API_KEY"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "code": 200,
+          "message": "",
+          "data": {}
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
